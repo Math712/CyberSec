@@ -39,5 +39,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@material-ui/core": "^4.12.4",
+    "bootstrap": "^5.2.1",
+    "framer-motion": "^7.3.6",
+    "node-sass": "^7.0.3",
+    "react-bootstrap": "^2.5.0",
+    "react-router-dom": "^6.4.1",
+    "react-toastify": "^9.0.8",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.55.0",
+    "sass-loader": "^13.0.2"
   }
 }
