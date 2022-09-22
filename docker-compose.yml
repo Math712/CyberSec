@@ -2,28 +2,28 @@ version: "3"
 
 services:
   nginx:
-   depends_on:
-     - back
-     - front
-   restart: always
-   build:
-     dockerfile: Dockerfile.dev
-     context: ./nginx
-   ports:
-     - "3050:3050"
+    depends_on:
+      - back
+      - front
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - "3050:3050"
   mongodb:
     image: mongo:3.5
     ports:
       - "27017:27017"
   back:
     container_name: back
-    build: 
-        context: ./back
-        dockerfile: Dockerfile.dev
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     ports:
-      - "4000:4000"
+      - "4000:8000"
     volumes:
-      - ./back:/app 
+      - ./back:/app
       - /app/node_modules
     links:
       - "mongodb:database"
