@@ -1,9 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Main from '../../components/main/Main';
-import './Home.scss';
-// import ImageLogo from "../assets/images/logo.png";
+import './Modele.scss';
 
 type State = {
   
@@ -22,7 +20,7 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
-const Home = () => {
+const Modele = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -37,10 +35,8 @@ const Home = () => {
   };
 
   return (
-    <>
-      <Main />
-    </>
+    <>Modele</>
   );
 }
 
-export default Home
+export default Modele

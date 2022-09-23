@@ -14,8 +14,8 @@ const LoaderContainer = (props: any) => {
                 y:"-100vh"
             }}
             transition={{
-                delay:3,
-                duration:0.3
+                delay:0.5,
+                duration:0.2
             }}
             onAnimationComplete={definition => {
                 setIsLoading(false)

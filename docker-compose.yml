@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  nginx:
+   depends_on:
+     - back
+     - front
+   restart: always
+   build:
+     dockerfile: Dockerfile.dev
+     context: ./nginx
+   ports:
+     - "3050:3050"
+  mongodb:
+    image: mongo:3.5
+    ports:
+      - "27017:27017"
+  back:
+    container_name: back
+    build: 
+        context: ./back
+        dockerfile: Dockerfile.dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./back:/app 
+      - /app/node_modules
+    links:
+      - "mongodb:database"
+  front:
+    container_name: front
+    build:
+      context: ./front
+      dockerfile: Dockerfile.dev
+    ports:
+      - "80:3000"
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    environment:
+      - WATCHPACK_POLLING=true
+
+volumes:
+  mongo-storage:
+    driver: local
