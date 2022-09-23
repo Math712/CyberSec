@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import authService from '../../services/authService';
 import './Login.scss'
 import ImageLogo from "../../assets/images/logo.png";
 
@@ -72,7 +73,7 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
-const Login = () => {
+const Login = ({setIsLogged}:any) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
@@ -91,7 +92,11 @@ const Login = () => {
   }, [state.username, state.password]);
 
   const handleLogin = () => {
-    if (state.username === 'test' && state.password === 'test') {
+    authService.login({
+      nom: state.username,
+      password: state.password
+    }).then(
+      (res) => {
         dispatch({
           type: 'loginSuccess',
           payload: 'Connexion réussie'
@@ -99,16 +104,22 @@ const Login = () => {
         toast.success("Connexion réussie", {
           position: toast.POSITION.BOTTOM_RIGHT
         });
-        return navigate('/home');
-    } else {
-        dispatch({
-          type: 'loginFailed',
-          payload: "Nom d'utilisateur ou mot de passe incorrect"
-        });
-        toast.error("Connexion échouée", {
-          position: toast.POSITION.BOTTOM_RIGHT
-        });
-    }
+        if (authService.isLogged()) {
+          setIsLogged(true)
+          navigate('/home');
+        }
+      },
+      error => {
+          dispatch({
+            type: 'loginFailed',
+            payload: "Nom d'utilisateur ou mot de passe incorrect"
+          });
+          toast.error("Connexion échouée", {
+            position: toast.POSITION.BOTTOM_RIGHT
+          });
+      }
+    );
+    
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
