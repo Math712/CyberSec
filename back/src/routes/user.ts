@@ -15,7 +15,7 @@ router.post('/check-credentials', (req, res) => {
                 const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "3600s"});
                 let {password: passwordRes, ...userRes} = user;
                 res.status(200)
-                    .cookie("access_token", 'Bearer' + token, {expires: new Date(Date.now()+3600)})
+                    .cookie("access_token", 'Bearer ' + token, {expires: new Date(Date.now()+3600)})
                     .json({message: "success", user: userRes}); 
             }).catch(e => sendError(res, e));
     } catch(e) {
