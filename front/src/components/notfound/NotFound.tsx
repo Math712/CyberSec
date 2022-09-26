@@ -1,12 +1,13 @@
 import React, { useReducer, useEffect } from 'react';
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import './Modele.scss';
+import './NotFound.scss';
 
-const Modele = () => {
+const NotFound = () => {
+
   return (
-    <>Modele</>
+    <>NotFound</>
   );
 }
 
-export default Modele
+export default NotFound

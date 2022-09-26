@@ -1,7 +1,7 @@
 import mongoose, {Schema} from 'mongoose'
 
 const userSchema = new Schema<userInterface>({
-    id: {type: String, required: true},
+    // id: {type: String, required: true},
     nom: {type: String, required: true},
     password: {type: String, required: true}
 });
