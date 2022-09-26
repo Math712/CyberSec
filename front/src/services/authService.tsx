@@ -10,7 +10,7 @@ class AuthService {
       })
       .then(response => {
         if (Object.keys(response.data.user!).length !== 0) {
-          localStorage.setItem("user", JSON.stringify(response.data.user._doc._id));
+          localStorage.setItem("user", JSON.stringify(response.data.user._doc));
         }
         return response.data;
       });
@@ -34,7 +34,6 @@ class AuthService {
 
   isLogged() {
     const userStr = localStorage.getItem("user");
-    console.log(userStr)
     if (userStr) return true;
 
     return false;

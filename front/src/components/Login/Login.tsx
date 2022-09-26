@@ -1,7 +1,9 @@
-import React, { useReducer, useEffect } from 'react';
-import { Navigate } from "react-router-dom";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import * as userActions from "../../actions/User";
+import * as loginFromActions from "../../actions/LoginForm";
 // import CardHeader from '@material-ui/core/CardHeader';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
@@ -10,113 +12,45 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import authService from '../../services/authService';
-import './Login.scss'
+import './Login.scss';
+// import userActions from "../../actions/User";
 import ImageLogo from "../../assets/images/logo.png";
 
-type State = {
-  username: string
-  password:  string
-  isButtonDisabled: boolean
-  helperText: string
-  isError: boolean
-};
+const Login = () => {
+  const dispatch: any = useDispatch();
 
-const initialState:State = {
-  username: '',
-  password: '',
-  isButtonDisabled: true,
-  helperText: '',
-  isError: false
-};
+  var loginForm: any = useSelector((state: any) => state.loginForm);
 
-type Action = { type: 'setUsername', payload: string }
-  | { type: 'setPassword', payload: string }
-  | { type: 'setIsButtonDisabled', payload: boolean }
-  | { type: 'loginSuccess', payload: string }
-  | { type: 'loginFailed', payload: string }
-  | { type: 'setIsError', payload: boolean };
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'setUsername': 
-      return {
-        ...state,
-        username: action.payload
-      };
-    case 'setPassword': 
-      return {
-        ...state,
-        password: action.payload
-      };
-    case 'setIsButtonDisabled': 
-      return {
-        ...state,
-        isButtonDisabled: action.payload
-      };
-    case 'loginSuccess': 
-      return {
-        ...state,
-        helperText: action.payload,
-        isError: false
-      };
-    case 'loginFailed': 
-      return {
-        ...state,
-        helperText: action.payload,
-        isError: true
-      };
-    case 'setIsError': 
-      return {
-        ...state,
-        isError: action.payload
-      };
-  }
-}
-
-const Login = ({setIsLogged}:any) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (state.username.trim() && state.password.trim()) {
-     dispatch({
-       type: 'setIsButtonDisabled',
-       payload: false
-     });
-    } else {
-      dispatch({
-        type: 'setIsButtonDisabled',
-        payload: true
-      });
-    }
-  }, [state.username, state.password]);
+  if(authService.isLogged()){
+    dispatch(userActions.loggedIn(true));
+    navigate('/home');
+  }
 
-  const handleLogin = () => {
+  var handleLogin = () => {
     authService.login({
-      nom: state.username,
-      password: state.password
+      nom: loginForm.username,
+      password: loginForm.password
     }).then(
       (res) => {
-        dispatch({
-          type: 'loginSuccess',
-          payload: 'Connexion réussie'
-        });
+        dispatch(loginFromActions.setHelperText("Connexion réussie"));
+        dispatch(loginFromActions.setIsError(false));
         toast.success("Connexion réussie", {
           position: toast.POSITION.BOTTOM_RIGHT
         });
         if (authService.isLogged()) {
-          setIsLogged(true)
+          dispatch(userActions.loggedIn(true));
           navigate('/home');
         }
       },
       error => {
-          dispatch({
-            type: 'loginFailed',
-            payload: "Nom d'utilisateur ou mot de passe incorrect"
-          });
+          dispatch(loginFromActions.setHelperText("Nom d'utilisateur ou mot de passe incorrects"));
+          dispatch(loginFromActions.setIsError(true));
           toast.error("Connexion échouée", {
             position: toast.POSITION.BOTTOM_RIGHT
           });
+          dispatch(userActions.loggedIn(false));
       }
     );
     
@@ -124,24 +58,18 @@ const Login = ({setIsLogged}:any) => {
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.keyCode === 13 || event.which === 13) {
-      state.isButtonDisabled || handleLogin();
+      loginForm.isButtonDisabled || handleLogin();
     }
   };
 
   const handleUsernameChange: React.ChangeEventHandler<HTMLInputElement> =
     (event) => {
-      dispatch({
-        type: 'setUsername',
-        payload: event.target.value
-      });
+      dispatch(loginFromActions.setUsername(event.target.value));
     };
 
   const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> =
     (event) => {
-      dispatch({
-        type: 'setPassword',
-        payload: event.target.value
-      });
+      dispatch(loginFromActions.setPassword(event.target.value));
     }
   return (
     <form className="container" noValidate autoComplete="off">
@@ -152,7 +80,7 @@ const Login = ({setIsLogged}:any) => {
         <CardContent>
           <div>
             <TextField
-              error={state.isError}
+              error={loginForm.isError}
               fullWidth
               id="username"
               type="email"
@@ -163,14 +91,14 @@ const Login = ({setIsLogged}:any) => {
               onKeyPress={handleKeyPress}
             />
             <TextField
-              error={state.isError}
+              error={loginForm.isError}
               fullWidth
               id="password"
               type="password"
               label="Password"
               placeholder="Password"
               margin="normal"
-              helperText={state.helperText}
+              helperText={loginForm.helperText}
               onChange={handlePasswordChange}
               onKeyPress={handleKeyPress}
             />
@@ -183,7 +111,7 @@ const Login = ({setIsLogged}:any) => {
             color="primary"
             className="loginBtn"
             onClick={handleLogin}
-            disabled={state.isButtonDisabled}>
+            disabled={!loginForm.username && !loginForm.password}>
             Login
           </Button>
         </CardActions>

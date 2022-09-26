@@ -5,47 +5,23 @@ import './Navbar.scss';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import authService from '../../services/authService';
+import { useDispatch } from 'react-redux';
+import { loggedIn } from '../../actions/User';
 
-type State = {
-  
-};
-
-const initialState:State = {
-  
-};
-
-type Action = { type: 'action', payload: string };
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    default: 
-      return state;
-  }
-}
-
-const Navbar = ({setIsLogged}: any) => {
+const Navbar = () => {
   const [openNav, setOpenNav] = useState(false)
-  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const dispatchGlobal: any = useDispatch()
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    
-  }, [state]);
-
-  const handleAction = () => {
-    dispatch({
-      type: 'action',
-      payload: ""
-    });
-  };
-
   const buttonHandler = (event: React.MouseEvent<HTMLAnchorElement>, item: NavItem ) => {
     event?.preventDefault()
-    if (item.id === 4 ) {
-      authService.logout()
-      setIsLogged(false)
-      navigate('/');
+    if (item.id === 4) {
+      authService.logout();
+      dispatchGlobal(loggedIn(false)).then(navigate('/'));
+    } else {
+      navigate(item.link)
     }
   };
 

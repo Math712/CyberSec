@@ -6,27 +6,26 @@ import Navbar from "./components/navbar/Navbar";
 // import NotFound from "./components/notfound/NotFound";
 import Procede from "./components/procede/Procede";
 import Home from "./components/Home/Home";
-import authService from "./services/authService";
+// import authService from "./services/authService";
+import { useSelector } from "react-redux"
+import NotFound from "./components/notfound/NotFound";
 const Login = lazy(() => import("./components/Login/Login"));
 
 const Routes = () => {
-  const [isLogged, setIsLogged] = useState(false);
+  const user: any = useSelector((state: any) => state.user);
+  const isLogin = user.isLogin;
 
-  const updateLogged = (val: boolean) => {
-     setIsLogged(val)
-  }
-  // var isLogged = authService.isLogged()
-  
   return (
     <>
-      { isLogged && <Navbar setIsLogged={updateLogged}/> }
+      { isLogin && <Navbar /> }
       <React_Routes>
-        { !isLogged && <Route path="/" element={<Login setIsLogged={updateLogged} />} /> }
-        { isLogged && <Route path="/home" element={<Home />} /> }
-        { isLogged && <Route path="/modele" element={<Modele />} /> }
-        { isLogged && <Route path="/procede" element={<Procede />} /> }
-        { isLogged && <Route path="/ingredients" element={<Ingredients />} /> }
-        <Route path="*" element={<Navigate to="/" />} />
+        { !isLogin && <Route path="/" element={<Login />} /> }
+        { isLogin && <Route path="/home" element={<Home />} /> }
+        { isLogin && <Route path="/modele" element={<Modele />} /> }
+        { isLogin && <Route path="/procede" element={<Procede />} /> }
+        { isLogin && <Route path="/ingredients" element={<Ingredients />} /> }
+        { isLogin && <Route path="*" element={<NotFound />} /> }
+        { !isLogin && <Route path="*" element={<Login />} /> }
       </React_Routes>
     </>
   );
