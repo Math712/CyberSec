@@ -1,7 +1,7 @@
 import mongoose, {Schema} from 'mongoose'
 
 const ingredientSchema = new Schema<ingredientInterface>({
-    id: {type: String, required: true},
+    // id: {type: String, required: true},
     nom: {type: String, required: true},
     description: {type: String, required: true}
 });
