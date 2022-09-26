@@ -9,8 +9,8 @@ const router = Router();
 
 router.post('/add', (req, res) => {
     try {
-        const {id, nom, description, pUHT, gamme, ingredients, grammage} = req.body;
-        Modele.create({id, nom, description, pUHT, gamme, ingredients, grammage})
+        const {nom, description, pUHT, gamme, ingredients, grammage} = req.body;
+        Modele.create({nom, description, pUHT, gamme, ingredients, grammage})
             .then((modele) => res.status(201).json({message: 'success', data_created: {modele: modele}}))
             .catch(e => sendError(res, e));
     } catch(e) {
@@ -74,5 +74,17 @@ router.get('/:id', (req, res) => {
         sendError(res, e);
     }
 }); 
+
+router.get('/', (_req, res) => {
+    try {
+        Modele.find().exec()
+            .then(modeles => {
+                if(!modeles) throw {status: 404, message: 'modeles not found'};
+                res.status(200).json({modeles: modeles});
+            }).catch(e => sendError(res, e));
+    } catch(e) {
+        sendError(res, e)
+    }
+})
 
 export default router;
