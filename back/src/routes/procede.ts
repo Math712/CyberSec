@@ -8,8 +8,8 @@ const router = Router();
 
 router.post('/add', (req, res) => {
     try {
-        const { id, nom, description, modeles, etapes} = req.body;
-        Procede.create({ id, nom, description, modeles, etapes})
+        const { nom, description, modeles, etapes} = req.body;
+        Procede.create({nom, description, modeles, etapes})
             .then((procede) => {
                 res.status(201)
                     .json({message: 'success', data_created: {procede: procede}});
@@ -65,6 +65,18 @@ router.get('/:id', (req, res) => {
     } catch(e) {
         sendError(res, e);
     }
-}); 
+});
+
+router.get('/', (_req, res) => {
+    try {
+        Procede.find().exec()
+            .then(procedes => {
+                if(!procedes) throw {status: 404, message: 'procedes not found'};
+                res.status(200).json({procedes: procedes});
+            }).catch(e => sendError(res, e));
+    } catch(e) {
+        sendError(res, e)
+    }
+})
 
 export default router;
