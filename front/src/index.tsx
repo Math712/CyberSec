@@ -7,10 +7,12 @@ import { Provider  } from 'react-redux';
 import ReduxThunk from "redux-thunk";
 import userReducer from "./reducers/User";
 import loginFormReducer from './reducers/LoginForm';
+import modeleReducer from './reducers/Modele';
 
 const rootReducer = combineReducers({
         user: userReducer,
-        loginForm: loginFormReducer
+        loginForm: loginFormReducer,
+        modeleReducer: modeleReducer
 })
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
