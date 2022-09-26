@@ -1,14 +1,15 @@
-import axios from "axios";
+import { axiosConfig } from "./axios/axiosConfig";
 
-const API_URL = "http://localhost:4000/user/";
+const API_URL = "/user";
 
 class AuthService {
   login(payload: Record<string, string>) {
-    return axios
-      .post(API_URL + "check-credentials", {
+    return axiosConfig
+      .post(API_URL + "/check-credentials", {
         nom: payload.nom, password: payload.password
       })
       .then(response => {
+        console.log(response)
         if (Object.keys(response.data.user!).length !== 0) {
           localStorage.setItem("user", JSON.stringify({id:response.data.user._doc.nom,nom:response.data.user._doc.nom}));
         }
@@ -18,8 +19,8 @@ class AuthService {
 
   logout() {
     localStorage.removeItem("user");
-    return axios
-      .post(API_URL + "log-out")
+    return axiosConfig
+      .post(API_URL + "/log-out")
       .then(response => {
         return response.data;
       });

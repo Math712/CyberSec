@@ -1,11 +1,10 @@
-import axios from 'axios';
-import authHeader from '../authHeader';
+import { axiosConfig } from '../axios/axiosConfig';
 
-const API_URL = 'http://localhost:4000/back/user/';
+const API_URL = "/user";
 
 class UserService {
   getCurrentUser() {
-    return axios.get(API_URL + 'user-info', { headers: authHeader() });
+    return axiosConfig.get(API_URL + '/user-info');
   }
 }
 

@@ -1,19 +1,19 @@
-import axios from "axios";
+import { axiosConfig } from "../axios/axiosConfig";
 
-const API_URL = "http://localhost:4000/modele/";
+const API_URL = "/modele";
 
 class ModeleService {
   getModeles() {
-      return axios
-        .get(API_URL,  { withCredentials: true })
+      return axiosConfig
+        .get(API_URL + '/', {withCredentials: true})
         .then(response => {
           return response.data;
         });
   }
 
   addModele(payload: {}) {
-    return axios    
-      .post(API_URL + "add", {
+    return axiosConfig    
+      .post(API_URL + "/add", {
         payload
       },  { withCredentials: true })
       .then(response => {
@@ -22,8 +22,8 @@ class ModeleService {
   }
 
   updateModele(payload: {}) {
-    return axios
-      .patch(API_URL + "update", {
+    return axiosConfig
+      .patch(API_URL + "/update", {
         payload
       },  { withCredentials: true })
       .then(response => {
@@ -32,8 +32,8 @@ class ModeleService {
   }
 
   deleteModele(payload: any) {
-    return axios
-      .delete(API_URL + "delete", payload)
+    return axiosConfig
+      .delete(API_URL + "/delete", payload)
       .then(response => {
         return response.data;
       });
