@@ -5,17 +5,17 @@ const API_URL = "http://localhost:4000/modele/";
 class ModeleService {
   getModeles() {
       return axios
-        .get(API_URL)
+        .get(API_URL,  { withCredentials: true })
         .then(response => {
           return response.data;
         });
   }
 
   addModele(payload: {}) {
-    return axios
+    return axios    
       .post(API_URL + "add", {
         payload
-      })
+      },  { withCredentials: true })
       .then(response => {
         return response.data;
       });
@@ -25,7 +25,7 @@ class ModeleService {
     return axios
       .patch(API_URL + "update", {
         payload
-      })
+      },  { withCredentials: true })
       .then(response => {
         return response.data;
       });

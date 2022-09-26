@@ -12,8 +12,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import authService from '../../services/authService';
-import './Login.scss';
 import ImageLogo from "../../assets/images/logo.png";
+import './Login.scss';
 
 const Login = () => {
   const dispatch: any = useDispatch();
@@ -33,7 +33,7 @@ const Login = () => {
       password: loginForm.password
     }).then(
       (res) => {
-        dispatch(loginFromActions.setHelperText("Connexion réussie"));
+        dispatch(loginFromActions.setHelperText(""));
         dispatch(loginFromActions.setIsError(false));
         toast.success("Connexion réussie", {
           position: toast.POSITION.BOTTOM_RIGHT
