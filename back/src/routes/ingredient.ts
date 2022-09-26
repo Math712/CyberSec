@@ -75,6 +75,18 @@ router.get('/:id', (req, res) => {
     } catch(e) {
         sendError(res, e);
     }
-}); 
+});
+
+router.get('/', (_req, res) => {
+    try {
+        Ingredient.find().exec()
+            .then(ingredients => {
+                if(!ingredients) throw {status: 404, message: 'ingredients not found'};
+                res.status(200).json({ingredients: ingredients});
+            }).catch(e => sendError(res, e));
+    } catch(e) {
+        sendError(res, e)
+    }
+})
 
 export default router;
