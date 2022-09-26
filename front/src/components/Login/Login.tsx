@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import authService from '../../services/authService';
 import './Login.scss';
-// import userActions from "../../actions/User";
 import ImageLogo from "../../assets/images/logo.png";
 
 const Login = () => {
