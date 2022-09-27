@@ -57,10 +57,13 @@ router.get('/:id', (req, res) => {
         Procede.findOne({_id: new ObjectId(id)}).exec()
             .then(procede => {
                 if(!procede) throw {status: 404, message: 'procede not found'};
-                procede.modeles.map(async (modeleId) => {
-                    return await Modele.findOne({_id: new ObjectId(modeleId)}).exec()
+                procede.modeles.map((modeleId) => {
+                    Modele.findOne({_id: new ObjectId(modeleId)}).exec()
+                        .then((modele) => {
+                            let procedeCopy = {...procede, modele: modele}
+                            res.status(200).json({procede: procede});
+                        }).catch(e => sendError(res,e ));
                 })
-                res.status(200).json({procede: procede});
             }).catch(e => sendError(res,e));
     } catch(e) {
         sendError(res, e);

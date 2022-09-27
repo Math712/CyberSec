@@ -12,10 +12,10 @@ router.post('/check-credentials', (req, res) => {
             .then((user) => {
                 if(!user) throw {status: 404, message: "user not found"};
                 if(password !== user.password) throw {status: 403, message: "bad password"};
-                const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "3600s"});
+                const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "10800s"});
                 let {password: passwordRes, ...userRes} = user;
                 res.status(200)
-                    .cookie("access_token", 'Bearer ' + token, {expires: new Date(Date.now()+3600)})
+                    .cookie("access_token", 'Bearer ' + token, {httpOnly: true/*, expires: new Date(Date.now()+10800)*/})
                     .json({message: "success", user: userRes}); 
             }).catch(e => sendError(res, e));
     } catch(e) {
