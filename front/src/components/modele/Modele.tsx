@@ -31,7 +31,6 @@ const Modele = () => {
   }, [])
 
   const handleRowUpdate = (newData: any, oldData: any, resolve: any) => {
-    console.log(newData, oldData)
     let errorList: any = []
     if (newData.nom === "") {
       errorList.push("Rééssayez")
@@ -60,7 +59,6 @@ const Modele = () => {
           return modele._id === oldData._id ? searchIndex = index : void 0;
         })
         updateModeles[searchIndex] = newData;
-        console.log(updateModeles)
         setModeles([...updateModeles]);
         resolve()
         setIserror(false)
@@ -168,7 +166,7 @@ const Modele = () => {
         <div>
           {iserror &&
             toast.error(errorMessages.map((msg: any, i: any) => {
-              return <div key={i}>{msg}</div>
+              return msg
             }), {
               position: toast.POSITION.BOTTOM_RIGHT
             })
