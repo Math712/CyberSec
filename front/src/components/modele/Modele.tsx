@@ -60,20 +60,20 @@ const Modele = () => {
         })
         updateModeles[searchIndex] = newData;
         setModeles([...updateModeles]);
-        resolve()
-        setIserror(false)
-        setErrorMessages([])
+        resolve();
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
 
-    }
+      }
   }
 
   const handleRowDelete = (oldData: any, resolve: any) => {
@@ -84,9 +84,10 @@ const Modele = () => {
       setModeles([...dataDelete]);
       resolve()
     }).catch(error => {
-      setErrorMessages(["Erreur serveur"])
-      setIserror(true)
-      resolve()
+      toast.error(error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      })
+      resolve();
     })
   }
 
@@ -117,20 +118,19 @@ const Modele = () => {
         let newModeleData = [...modeles];
         newModeleData.push(newData);
         setModeles(newModeleData);
-        resolve()
-        setErrorMessages([])
-        setIserror(false)
+        resolve();
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
-
-    }
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
+      }
   }
 
 
@@ -162,16 +162,6 @@ const Modele = () => {
               }),
           }}
         />
-
-        <div>
-          {iserror &&
-            toast.error(errorMessages.map((msg: any, i: any) => {
-              return msg
-            }), {
-              position: toast.POSITION.BOTTOM_RIGHT
-            })
-          }
-        </div>
       </div>
     </div>
     </>

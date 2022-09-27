@@ -56,16 +56,18 @@ const Procede = () => {
         setIserror(false)
         setErrorMessages([])
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
 
-    }
+      }
   }
 
   const handleRowDelete = (oldData: any, resolve: any) => {
@@ -76,9 +78,10 @@ const Procede = () => {
       setProcedes([...dataDelete]);
       resolve()
     }).catch(error => {
-      setErrorMessages(["Erreur serveur"])
-      setIserror(true)
-      resolve()
+      toast.error(error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      })
+      resolve();
     })
   }
 
@@ -107,16 +110,17 @@ const Procede = () => {
         setErrorMessages([])
         setIserror(false)
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
-
-    }
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
+      }
   }
 
 
@@ -149,15 +153,11 @@ const Procede = () => {
           }}
         />
 
-        <div>
-          {iserror &&
-            toast.error(errorMessages.map((msg: any, i: any) => {
-              return msg
-            }), {
-              position: toast.POSITION.BOTTOM_RIGHT
-            })
-          }
-        </div>
+        {iserror &&
+          toast.error(errorMessages[0], {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+        }
       </div>
     </div>
     </>
