@@ -4,6 +4,7 @@ import { Procede } from "../model/procede";
 import { ObjectId } from "bson";
 import { sendError } from "../utils/sendError";
 import { Ingredient } from "../model/ingredient";
+import { model } from "mongoose";
 
 const router = Router();
 
@@ -63,12 +64,15 @@ router.get('/:id', (req, res) => {
     try {
         const {id} = req.params;
         Modele.findOne({_id: new ObjectId(id)}).exec()
-            .then(modele => {
+            .then( async (modele) => {
                 if(!modele) throw {status: 404, message: 'Modele not found'};
-                modele.ingredients.map(async (ingredientId) => {
-                    return await Ingredient.findOne({_id: new ObjectId(ingredientId)}).exec()
-                })
-                res.status(200).json({modele: modele});
+                modele.ingredients.map((ingredientId) => {
+                    Ingredient.findOne({_id: new ObjectId(ingredientId)}).exec()
+                        .then((ingredient) => {
+                            let modeleCopy = {...modele, ingredients: ingredient}
+                            res.status(200).json({modele: modeleCopy});
+                        }).catch(e => sendError(res, e));
+                });
             }).catch(e => sendError(res,e));
     } catch(e) {
         sendError(res, e);
