@@ -81,7 +81,7 @@ const Modele = () => {
   const handleRowDelete = (oldData: any, resolve: any) => {
     modeleService.deleteModele(oldData).then(response => {
       const dataDelete = [...modeles];
-      const index = oldData.id;
+      const index = oldData._id;
       dataDelete.splice(index, 1);
       setModeles([...dataDelete]);
       resolve()

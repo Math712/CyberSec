@@ -36,8 +36,7 @@ router.patch('/update', (req, res) => {
 
 router.delete('/delete', (req, res) => {
     try {
-        const id = req.body;
-        console.log(id)
+        const {id} = req.body;
         Modele.findOne({_id: new ObjectId(id)}).exec()
             .then(modele => {
                 if(!modele) throw {status: 404, message: "modele not found"};

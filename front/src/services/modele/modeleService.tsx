@@ -47,6 +47,7 @@ class ModeleService {
   }
 
   deleteModele(payload: any) {
+    console.log(payload)
     return axiosConfig
       .delete(API_URL + "/delete", {data: {"id": payload._id}})
       .then(response => {
