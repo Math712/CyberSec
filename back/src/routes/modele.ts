@@ -36,7 +36,8 @@ router.patch('/update', (req, res) => {
 
 router.delete('/delete', (req, res) => {
     try {
-        const {id} = req.body;
+        const id = req.body;
+        console.log(id)
         Modele.findOne({_id: new ObjectId(id)}).exec()
             .then(modele => {
                 if(!modele) throw {status: 404, message: "modele not found"};
@@ -51,7 +52,7 @@ router.delete('/delete', (req, res) => {
                     .catch(e =>  {throw {status: 500, message: e.message}});
                 modele.delete();
                 res.status(201).json({message: 'success'});
-            });
+            }).catch(e => sendError(res,e));
     } catch(e) {
         sendError(res, e);
     }

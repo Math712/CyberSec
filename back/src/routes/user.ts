@@ -1,4 +1,4 @@
-import { Router, Response as IResponse } from "express";
+import { Router } from "express";
 import { User } from "../model/user";
 import { sendError } from "../utils/sendError";
 import jwt from "jsonwebtoken";
@@ -15,7 +15,7 @@ router.post('/check-credentials', (req, res) => {
                 const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "365d"});
                 let {password: passwordRes, ...userRes} = user;
                 res.status(200)
-                    .cookie("access_token", token, {httpOnly: true, maxAge: 1000*60*60*720})
+                    .cookie("access_token", "Bearer "+token, {httpOnly: true, maxAge: 1000*60*60*720})
                     .json({message: "success", user: userRes}); 
             }).catch(e => sendError(res, e));
     } catch(e) {
