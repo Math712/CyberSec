@@ -31,7 +31,6 @@ const Modele = () => {
   }, [])
 
   const handleRowUpdate = (newData: any, oldData: any, resolve: any) => {
-    console.log(newData, oldData)
     let errorList: any = []
     if (newData.nom === "") {
       errorList.push("Rééssayez")
@@ -60,22 +59,21 @@ const Modele = () => {
           return modele._id === oldData._id ? searchIndex = index : void 0;
         })
         updateModeles[searchIndex] = newData;
-        console.log(updateModeles)
         setModeles([...updateModeles]);
-        resolve()
-        setIserror(false)
-        setErrorMessages([])
+        resolve();
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
 
-    }
+      }
   }
 
   const handleRowDelete = (oldData: any, resolve: any) => {
@@ -86,9 +84,10 @@ const Modele = () => {
       setModeles([...dataDelete]);
       resolve()
     }).catch(error => {
-      setErrorMessages(["Erreur serveur"])
-      setIserror(true)
-      resolve()
+      toast.error(error.message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      })
+      resolve();
     })
   }
 
@@ -119,20 +118,19 @@ const Modele = () => {
         let newModeleData = [...modeles];
         newModeleData.push(newData);
         setModeles(newModeleData);
-        resolve()
-        setErrorMessages([])
-        setIserror(false)
+        resolve();
       }).catch(error => {
-        setErrorMessages(["Erreur serveur"])
-        setIserror(true)
-        resolve()
-      })
-    } else {
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
-
-    }
+          toast.error(error.message, {
+            position: toast.POSITION.BOTTOM_RIGHT
+          })
+          resolve();
+        })
+      } else {
+        toast.error("Erreur serveur", {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+        resolve();
+      }
   }
 
 
@@ -164,16 +162,6 @@ const Modele = () => {
               }),
           }}
         />
-
-        <div>
-          {iserror &&
-            toast.error(errorMessages.map((msg: any, i: any) => {
-              return <div key={i}>{msg}</div>
-            }), {
-              position: toast.POSITION.BOTTOM_RIGHT
-            })
-          }
-        </div>
       </div>
     </div>
     </>

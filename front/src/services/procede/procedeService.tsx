@@ -1,9 +1,9 @@
 import { axiosConfig } from "../axios/axiosConfig";
 
-const API_URL = "/modele";
+const API_URL = "/procede";
 
-class ModeleService {
-  getModeles() {
+class ProcedeService {
+  getProcedes() {
       return axiosConfig
         .get(API_URL + '/')
         .then(response => {
@@ -11,33 +11,29 @@ class ModeleService {
         });
   }
 
-  addModele(payload: any) {
+  addProcede(payload: any) {
     return axiosConfig    
       .post(API_URL + "/add",
       {
         "nom": payload.nom,
         "description": payload.description,
-        "pUHT": payload.pUHT,
-        "gamme": payload.gamme,
-        "ingredients": payload.ingredients,
-        "grammage": payload.grammage
+        "modeles": payload.modeles,
+        "etapes": payload.etapes
       })
       .then(response => {
         return response.data;
       });
   }
 
-  updateModele(payload: any) {
+  updateProcede(payload: any) {
     return axiosConfig
       .patch(API_URL + "/update", 
         {
           "id": payload._id,
           "nom": payload.nom,
           "description": payload.description,
-          "pUHT": payload.pUHT,
-          "gamme": payload.gamme,
-          "ingredients": payload.ingredients,
-          "grammage": payload.grammage
+          "modeles": payload.modeles,
+          "etapes": payload.etapes
         }
       )
       .then(response => {
@@ -45,7 +41,7 @@ class ModeleService {
       });
   }
 
-  deleteModele(payload: any) {
+  deleteProcede(payload: any) {
     return axiosConfig
       .delete(API_URL + "/delete", {data: {"id": payload._id}})
       .then(response => {
@@ -54,4 +50,4 @@ class ModeleService {
   }
 }
 
-export default new ModeleService();
+export default new ProcedeService();
