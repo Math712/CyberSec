@@ -11,12 +11,11 @@ router.post('/check-credentials', (req, res) => {
         User.findOne({nom: nom})
             .then((user) => {
                 if(!user) throw {status: 404, message: "user not found"};
-                if(password !== user.password) throw {status: 403, message: "bad password"};
+                if(!user.validPassword(password, user.password, user.salt)) throw {status: 403, message: "bad password"};
                 const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "10800s"});
-                let {password: passwordRes, ...userRes} = user;
                 res.status(200)
                     .cookie("access_token", 'Bearer ' + token, {httpOnly: true/*, expires: new Date(Date.now()+10800)*/})
-                    .json({message: "success", user: userRes}); 
+                    .json({message: "success", user: {id: user._id, nom: user.nom}}); 
             }).catch(e => sendError(res, e));
     } catch(e) {
         sendError(res, e);
@@ -29,6 +28,17 @@ router.get('/log-out', (req, res) => {
     } catch (e) {
         sendError(res, e);
     }
+});
+
+
+router.post('/sing-in', (req, res) => {
+    const {nom, password} = req.body
+    User.create({nom}).then(user => {
+        let {salt, hash} = user.setPassword(password);
+        user.salt = salt;
+        user.password = hash;
+        user.save().then(() => res.status(201).json(user));
+    })
 });
 
 export default router;
