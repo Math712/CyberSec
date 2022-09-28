@@ -3,19 +3,35 @@ import { toast } from "react-toastify";
 import MaterialTable from 'material-table';
 import procedeService from '../../services/procede/procedeService';
 import './Procede.scss';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import modeleService from '../../services/modele/modeleService';
+import CSS from 'csstype';
+
+
+const selectStyle:CSS.Properties = {
+  width: "15em"
+}
 
 const Procede = () => {
 
   const [procedes, setProcedes]: any = useState([]);
+  const [modeles, setModeles]: any = useState([]);
+  const [currentModele, setCurrentModele]: any = useState("");
   const [iserror, setIserror]: any = useState(false);
   const [errorMessages, setErrorMessages]: any = useState([]);
+  const [open, setOpen] = useState(false);
 
-  let columns = [
-    { title: 'Nom', field: 'nom' },
-    { title: 'Description', field: 'description' },
-    { title: 'Modeles', field: 'modeles' },
-    { title: 'Etapes', field: 'etapes' }
-  ]
+  var currentProcedeIndex = 0
+
+  const handleClickOpen:any = (clickedProcede: any) => {
+    procedes.map((procede:any, index:any) => {
+      return procede._id === clickedProcede._id ? currentProcedeIndex = index : void 0;
+    })[0]
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   useEffect(() => {
@@ -23,10 +39,18 @@ const Procede = () => {
       procedeService.getProcedes().then((res)=>{
         setProcedes(res.procedes)
       });
+      modeleService.getModeles().then((res)=>{
+        setModeles(res.modeles)
+        modeles.length > 0 ? setCurrentModele(...modeles[0]) : setCurrentModele({}) ;
+      });
     }
   
     refreshEntries();
   }, [])
+
+  const menuItems = modeles.map((modele: any) => (
+    <MenuItem key={modele._id} value={modele._id} style={selectStyle}><em>{modele.nom}</em></MenuItem>
+  ));
 
   const handleRowUpdate = (newData: any, oldData: any, resolve: any) => {
     let errorList: any = []
@@ -36,7 +60,7 @@ const Procede = () => {
     if (newData.description === "") {
       errorList.push("Rééssayez")
     }
-    if (newData.modeles === "") {
+    if (newData.modeles === null) {
       errorList.push("Rééssayez")
     }
     if (newData.etapes === "") {
@@ -66,8 +90,26 @@ const Procede = () => {
           position: toast.POSITION.BOTTOM_RIGHT
         })
         resolve();
-
       }
+  }
+
+  const handleUpdateModele: any = (e: any) => {
+    const newModele = modeles.filter((modele:any) => {
+      return modele._id === e.target.value
+    })[0]
+    const newProcede = procedes[currentProcedeIndex];
+    newProcede["modeles"] = [newModele];
+
+    procedeService.updateProcede(newProcede).then(response => {
+      const updateProcede = [...procedes];
+      updateProcede[currentProcedeIndex] = newProcede;
+      setProcedes([...updateProcede]);
+      setCurrentModele(newModele)
+    }).catch(error => {
+        toast.error(error.message, {
+          position: toast.POSITION.BOTTOM_RIGHT
+        })
+      })
   }
 
   const handleRowDelete = (oldData: any, resolve: any) => {
@@ -94,7 +136,7 @@ const Procede = () => {
     if (newData.description === "") {
       errorList.push("Rééssayez")
     }
-    if (newData.modeles === "") {
+    if (newData.modeles === null) {
       errorList.push("Rééssayez")
     }
     if (newData.etapes === "") {
@@ -123,13 +165,19 @@ const Procede = () => {
       }
   }
 
+  let columns:any = [
+    { title: 'Nom', field: 'nom' },
+    { title: 'Description', field: 'description' },
+    { title: 'Modèle', field: 'modeles', editable: 'never', render: (rowData: any) => <Button variant="outlined" onClick={() => {handleClickOpen(rowData);setOpen(true)}}> Voir </Button> },
+    { title: 'Étapes', field: 'etapes' }
+  ]
 
   return (
     <>
     <div className="row m-auto">
       <div className="col md-4">
         <MaterialTable
-          title="Procédé"
+          title="Procédés"
           columns={columns}
           data={procedes}
           options={{
@@ -152,6 +200,31 @@ const Procede = () => {
               }),
           }}
         />
+
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+          <FormControl>
+          <InputLabel id="select-autowidth-label">Modèle</InputLabel>
+          <Select 
+            labelId="select-autowidth-label"
+            id="select-autowidth"
+            value={currentModele._id ?? ""}
+            onChange={handleUpdateModele}
+            autoWidth
+            defaultValue={currentModele._id ?? ""}
+            label="Modèle"
+            style={selectStyle}
+          >
+            {
+              menuItems
+            }
+          </Select>
+          </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Fermer</Button>
+          </DialogActions>
+        </Dialog>
 
         {iserror &&
           toast.error(errorMessages[0], {
