@@ -1,6 +1,6 @@
 import { lazy, useState } from "react";
 import { Routes as React_Routes, Route, Navigate } from "react-router-dom";
-import Ingredients from "./components/ingredients/Ingredients";
+import {Ingredient} from "./components/ingredient/Ingredient";
 import Modele from "./components/modele/Modele";
 import Navbar from "./components/navbar/Navbar";
 // import NotFound from "./components/notfound/NotFound";
@@ -23,7 +23,7 @@ const Routes = () => {
         { isLogin && <Route path="/home" element={<Home />} /> }
         { isLogin && <Route path="/modele" element={<Modele />} /> }
         { isLogin && <Route path="/procede" element={<Procede />} /> }
-        { isLogin && <Route path="/ingredients" element={<Ingredients />} /> }
+        { isLogin && <Route path="/ingredients" element={<Ingredient />} /> }
         { isLogin && <Route path="*" element={<NotFound />} /> }
         { !isLogin && <Route path="*" element={<Login />} /> }
       </React_Routes>

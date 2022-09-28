@@ -28,7 +28,7 @@ router.patch('/update', (req, res) => {
                 ingredient.updateOne({
                     nom: nom,
                     description: description,
-                });
+                }).exec();
                 res.status(201).json({message: 'success', data_update: {ingredient: ingredient}});
             }).catch((e) => {
                 sendError(res, e);
