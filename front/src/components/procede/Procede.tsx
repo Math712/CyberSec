@@ -7,7 +7,6 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import modeleService from '../../services/modele/modeleService';
 import CSS from 'csstype';
 
-
 const selectStyle:CSS.Properties = {
   width: "15em"
 }
@@ -71,7 +70,7 @@ const Procede = () => {
       procedeService.updateProcede(newData).then(response => {
         const updateProcede = [...procedes];
         var searchIndex = 0;
-        updateProcede.filter((procede, index) => {
+        updateProcede.map((procede, index) => {
           return procede._id === oldData._id ? searchIndex = index : void 0;
         })
         updateProcede[searchIndex] = newData;
@@ -94,11 +93,16 @@ const Procede = () => {
   }
 
   const handleUpdateModele: any = (e: any) => {
-    const newModele = modeles.filter((modele:any) => {
+    const newModele = modeles.map((modele:any) => {
       return modele._id === e.target.value
     })[0]
     const newProcede = procedes[currentProcedeIndex];
-    newProcede["modeles"] = [newModele];
+
+    if (e.target.value !== "") {
+      newProcede["modeles"] = [newModele];
+    } else {
+      newProcede["modeles"] = [];
+    }
 
     procedeService.updateProcede(newProcede).then(response => {
       const updateProcede = [...procedes];
@@ -115,8 +119,11 @@ const Procede = () => {
   const handleRowDelete = (oldData: any, resolve: any) => {
     procedeService.deleteProcede(oldData).then(response => {
       const dataDelete = [...procedes];
-      const index = oldData._id;
-      dataDelete.splice(index, 1);
+      var searchIndex = 0;
+      dataDelete.map((procede, index) => {
+        procede._id === oldData._id ? searchIndex = index : void 0;
+      })
+      dataDelete.splice(searchIndex, 1);
       setProcedes([...dataDelete]);
       resolve()
     }).catch(error => {
@@ -146,6 +153,7 @@ const Procede = () => {
     if (errorList.length < 1) {
       procedeService.addProcede(newData).then(response => {
         let newProcedeData = [...procedes];
+        newData["_id"] = response.data_created.procede._id
         newProcedeData.push(newData);
         setProcedes(newProcedeData);
         resolve()
@@ -168,14 +176,13 @@ const Procede = () => {
   let columns:any = [
     { title: 'Nom', field: 'nom' },
     { title: 'Description', field: 'description' },
-    { title: 'Modèle', field: 'modeles', editable: 'never', render: (rowData: any) => <Button variant="outlined" onClick={() => {handleClickOpen(rowData);setOpen(true)}}> Voir </Button> },
+    { title: 'Modèle', field: 'modeles', editable: 'never', render: (rowData: any) => <Button variant="outlined" onClick={() => {handleClickOpen(rowData);setOpen(true)}}> Modifier </Button> },
     { title: 'Étapes', field: 'etapes' }
   ]
 
   return (
     <>
-    <div className="row m-auto">
-      <div className="col md-4">
+    <div className="col mx-3 my-auto">
         <MaterialTable
           title="Procédés"
           columns={columns}
@@ -208,13 +215,16 @@ const Procede = () => {
           <Select 
             labelId="select-autowidth-label"
             id="select-autowidth"
-            value={currentModele._id ?? ""}
+            value={currentModele?._id ?? "Aucun"}
             onChange={handleUpdateModele}
             autoWidth
-            defaultValue={currentModele._id ?? ""}
+            defaultValue={currentModele?._id ?? "Aucun"}
             label="Modèle"
             style={selectStyle}
           >
+            <MenuItem value="">
+              <em>Aucun</em>
+            </MenuItem>
             {
               menuItems
             }
@@ -225,13 +235,6 @@ const Procede = () => {
             <Button onClick={handleClose}>Fermer</Button>
           </DialogActions>
         </Dialog>
-
-        {iserror &&
-          toast.error(errorMessages[0], {
-            position: toast.POSITION.BOTTOM_RIGHT
-          })
-        }
-      </div>
     </div>
     </>
   );

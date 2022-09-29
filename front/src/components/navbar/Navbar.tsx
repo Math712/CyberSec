@@ -7,11 +7,12 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import authService from '../../services/authService';
 import { useDispatch } from 'react-redux';
 import { loggedIn } from '../../actions/User';
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
-  const [openNav, setOpenNav] = useState(false)
+  const [openNav, setOpenNav] = useState(false);
 
-  const dispatchGlobal: any = useDispatch()
+  const dispatchGlobal: any = useDispatch();
 
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const Navbar = () => {
     if (item.id === 4) {
       authService.logout();
       dispatchGlobal(loggedIn(false)).then(navigate('/'));
+      Cookies.remove("access_token")
     } else {
       navigate(item.link)
     }

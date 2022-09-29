@@ -20,12 +20,12 @@ const Routes = () => {
       { isLogin && <Navbar /> }
       <React_Routes>
         { !isLogin && <Route path="/" element={<Login />} /> }
-        { isLogin && <Route path="/home" element={<Home />} /> }
-        { isLogin && <Route path="/modele" element={<Modele />} /> }
-        { isLogin && <Route path="/procede" element={<Procede />} /> }
+        { !isLogin && <Route path="*" element={<Login />} /> }
+        {/* { isLogin && <Route path="/home" element={<Home />} /> } */}
+        { isLogin && <Route path="/modeles" element={<Modele />} /> }
+        { isLogin && <Route path="/procedes" element={<Procede />} /> }
         { isLogin && <Route path="/ingredients" element={<Ingredient />} /> }
         { isLogin && <Route path="*" element={<NotFound />} /> }
-        { !isLogin && <Route path="*" element={<Login />} /> }
       </React_Routes>
     </>
   );

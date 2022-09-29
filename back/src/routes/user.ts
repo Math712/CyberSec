@@ -15,7 +15,7 @@ router.post('/check-credentials', (req, res) => {
                 const token = jwt.sign({id: user._id}, 'mon secret', {expiresIn: "10800s"});
                 let {password: passwordRes, ...userRes} = user;
                 res.status(200)
-                    .cookie("access_token", 'Bearer ' + token, {httpOnly: true/*, expires: new Date(Date.now()+10800)*/})
+                    .cookie("access_token", 'Bearer ' + token, {httpOnly: false/*, expires: new Date(Date.now()+10800)*/})
                     .json({message: "success", user: userRes}); 
             }).catch(e => sendError(res, e));
     } catch(e) {
@@ -25,7 +25,7 @@ router.post('/check-credentials', (req, res) => {
 
 router.get('/log-out', (req, res) => {
     try {
-        res.status(200).clearCookie('access_token').json({message: "success"});
+        res.status(200).clearCookie('access_token', {path:'/', domain:'localhost'}).json({message: "success"});
     } catch (e) {
         sendError(res, e);
     }
