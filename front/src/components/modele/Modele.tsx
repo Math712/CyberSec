@@ -24,8 +24,8 @@ const Modele = () => {
 
   const handleClickOpen:any = (clickedIngredient: any) => {
     ingredients.map((ingredients:any, index:any) => {
-      return ingredients._id === clickedIngredient._id ? currentModeleIndex = index : void 0;
-    })[0]
+      ingredients._id === clickedIngredient._id ? currentModeleIndex = index : void 0;
+    })
   };
 
   const handleClose = () => {
@@ -235,7 +235,7 @@ const Modele = () => {
             label="Ingrédient"
             style={selectStyle}
           >
-            <MenuItem value="">
+            <MenuItem value="Aucun">
               <em>Aucun</em>
             </MenuItem>
             {

@@ -24,8 +24,8 @@ const Procede = () => {
 
   const handleClickOpen:any = (clickedProcede: any) => {
     procedes.map((procede:any, index:any) => {
-      return procede._id === clickedProcede._id ? currentProcedeIndex = index : void 0;
-    })[0]
+      procede._id === clickedProcede._id ? currentProcedeIndex = index : void 0;
+    })
   };
 
   const handleClose = () => {
