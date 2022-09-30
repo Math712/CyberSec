@@ -22,9 +22,9 @@ const Modele = () => {
 
   var currentModeleIndex = 0
 
-  const handleClickOpen:any = (clickedIngredient: any) => {
-    ingredients.map((ingredients:any, index:any) => {
-      ingredients._id === clickedIngredient._id ? currentModeleIndex = index : void 0;
+  const handleClickOpen:any = (clickedModele: any) => {
+    modeles.map((modele:any, index:any) => {
+      modele._id === clickedModele._id ? currentModeleIndex = index : void 0;
     })
   };
 
@@ -98,7 +98,7 @@ const Modele = () => {
   }
 
   const handleUpdateIngredient: any = (e: any) => {
-    const newIngredient = ingredients.map((ingredient:any) => {
+    const newIngredient = ingredients.filter((ingredient:any) => {
       return ingredient._id === e.target.value
     })[0]
     const newModele = modeles[currentModeleIndex];
@@ -180,8 +180,6 @@ const Modele = () => {
         })
         resolve();
       }
-
-      console.log(newData, modeles)
   }
 
   let columns: any = [
@@ -228,14 +226,14 @@ const Modele = () => {
           <Select 
             labelId="select-autowidth-label"
             id="select-autowidth"
-            value={currentIngredient?._id ?? "Aucun"}
+            value={currentIngredient?._id ?? ""}
             onChange={handleUpdateIngredient}
             autoWidth
-            defaultValue={currentIngredient?._id ?? "Aucun"}
+            defaultValue={currentIngredient?._id ?? ""}
             label="Ingrédient"
             style={selectStyle}
           >
-            <MenuItem value="Aucun">
+            <MenuItem value="">
               <em>Aucun</em>
             </MenuItem>
             {

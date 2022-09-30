@@ -93,7 +93,7 @@ const Procede = () => {
   }
 
   const handleUpdateModele: any = (e: any) => {
-    const newModele = modeles.map((modele:any) => {
+    const newModele = modeles.filter((modele:any) => {
       return modele._id === e.target.value
     })[0]
     const newProcede = procedes[currentProcedeIndex];
