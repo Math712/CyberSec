@@ -31,7 +31,7 @@ router.get('/log-out', (req, res) => {
 });
 
 
-router.post('/sing-in', (req, res) => {
+router.post('/sign-in', (req, res) => {
     const {nom, password} = req.body
     User.create({nom}).then(user => {
         let {salt, hash} = user.setPassword(password);
