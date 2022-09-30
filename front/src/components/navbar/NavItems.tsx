@@ -12,23 +12,23 @@ export type NavItem = {
 }
  
 export const navItems: NavItem[] = [
-    {
-        id: 0,
-        icon: <HomeIcon/>,
-        text: "Accueil",
-        link: "/home"
-    },
+    // {
+    //     id: 0,
+    //     icon: <HomeIcon/>,
+    //     text: "Accueil",
+    //     link: "/home"
+    // },
     {
         id: 1,
         icon: <TollIcon/>,
         text: "Modèles",
-        link: "/modele"
+        link: "/modeles"
     },
     {
         id: 2,
         icon: <FactoryIcon/>,
         text: "Procédé",
-        link: "/procede"
+        link: "/procedes"
     },
     {
         id: 3,

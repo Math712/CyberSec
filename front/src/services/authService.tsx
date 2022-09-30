@@ -9,7 +9,6 @@ class AuthService {
         nom: payload.nom, password: payload.password
       })
       .then(response => {
-        console.log(response)
         if (Object.keys(response.data.user!).length !== 0) {
           localStorage.setItem("user", JSON.stringify({id:response.data.user._doc.nom,nom:response.data.user._doc.nom}));
         }

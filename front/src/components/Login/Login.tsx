@@ -24,7 +24,7 @@ const Login = () => {
 
   if(authService.isLogged()){
     dispatch(userActions.loggedIn(true));
-    navigate('/home');
+    navigate('/modele');
   }
 
   var handleLogin = () => {
@@ -40,7 +40,7 @@ const Login = () => {
         });
         if (authService.isLogged()) {
           dispatch(userActions.loggedIn(true));
-          navigate('/home');
+          navigate('/modeles');
         }
       },
       error => {

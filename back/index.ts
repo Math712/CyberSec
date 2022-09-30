@@ -10,26 +10,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
-const corsOptions = {
-    "origin": ["http://localhost"],
-    "credentials": true,
-    "exposeHeaders": ["Authorization"]
-  }
-app.use(cors(corsOptions));
 
-// app.use(cors(/*{origin: 'http://localhost:3000', credentials: true, exposedHeaders: ['Authorization']}*/));
+app.use(cors());
 
-app.use('/user', routes.user)
+app.use('/back/user', routes.user)
 
-app.use('/', middleware)
+app.use('/back/', middleware)
 
-app.use('/ingredient', routes.ingredient);
+app.use('/back/ingredient', routes.ingredient);
 
-app.use('/modele', routes.modele);
+app.use('/back/modele', routes.modele);
 
-app.use('/procede', routes.procede);
+app.use('/back/procede', routes.procede);
 
-app.use('/', (_req, res) => {
+app.use('/back/', (_req, res) => {
     res.json({message: 'Server Online'});
 })
 

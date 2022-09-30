@@ -24,7 +24,7 @@ router.post('/check-credentials', (req, res) => {
 
 router.get('/log-out', (req, res) => {
     try {
-        res.status(200).clearCookie('access_token').json({message: "success"});
+        res.status(200).clearCookie('access_token', {path:'/', domain:'localhost'}).json({message: "success"});
     } catch (e) {
         sendError(res, e);
     }

@@ -58,19 +58,24 @@ export const Ingredient = () => {
             updateIngredients(newData).then(res => {
                 const updateIngredients = [...ingredients];
                 let searchIndex = 0;
-                updateIngredients.filter((ingredient: any, index) => 
+                updateIngredients.map((ingredient: any, index) => 
                     searchIndex = ingredient._id === oldData._id ? index : 0
                 );
                 updateIngredients[searchIndex] = newData;
                 setIngredients([...updateIngredients]);
                 setIsError(false);
                 setErrorMessages([]);
-            }). catch(e => {
-                console.log(e)
-                setErrorMessages(["Erreur serveur"]);
-                setIsError(true)
-            })
-        }
+            }).catch(error => {
+                toast.error(error.message, {
+                  position: toast.POSITION.BOTTOM_RIGHT
+                })
+              })
+            } else {
+              toast.error("Erreur serveur", {
+                position: toast.POSITION.BOTTOM_RIGHT
+              })
+      
+            }
     }
 
     const handleRowAdd = async (newData: any) => {
@@ -78,38 +83,45 @@ export const Ingredient = () => {
         if(!isEmptyField) {
             addIngredients(newData).then(res => {
                 let newIngredients = [...ingredients];
+                newData["_id"] = res.data_created._id
                 newIngredients.push(newData);
                 setIngredients(newIngredients);
                 setErrorMessages([]);
                 setIsError(false);
-            }).catch(e=> {
-                setErrorMessages(["Erreur serveur"]);
-                setIsError(true);
-            })
-        }
+            }).catch(error => {
+                toast.error(error.message, {
+                  position: toast.POSITION.BOTTOM_RIGHT
+                })
+              })
+            } else {
+              toast.error("Erreur serveur", {
+                position: toast.POSITION.BOTTOM_RIGHT
+              })
+            }
     }
 
     const handleRowDelete = async (oldData: any) => {
         deleteIngredients(oldData).then(res => {
             const dataDelete = [...ingredients];
-            const index = oldData._id;
-            dataDelete.splice(index, 1);
+            var searchIndex = 0;
+            dataDelete.map((ingedient, index) => {
+                ingedient._id === oldData._id ? searchIndex = index : void 0;
+            })
+            dataDelete.splice(searchIndex, 1);
             setIngredients([...dataDelete]);
             
-        }).catch(e => {
-            setErrorMessages(["Erreur serveur"]);
-            setIsError(true);
-            
-        });
+        }).catch(error => {
+            toast.error(error.message, {
+              position: toast.POSITION.BOTTOM_RIGHT
+            })
+          })
     }
     
     return (
         <>
-            <p>Ingredient</p>
-            <div className="row m-auto">
-                <div className="col md-4">
+            <div className="col mx-3 my-auto">
                     <MaterialTable
-                        title="Ingrdients"
+                        title="Ingrédients"
                         columns={columns}
                         data={ingredients}
                         options={{
@@ -122,13 +134,6 @@ export const Ingredient = () => {
                             onRowDelete: handleRowDelete
                         }}
                     />
-
-                    <div>
-                        {isError && toast.error(errorMessages.map((msg, index) => {
-                            return <div key={index}>{msg}</div>
-                        }), {position: toast.POSITION.BOTTOM_RIGHT})}
-                    </div>
-                </div>
             </div>
         </>
     );
