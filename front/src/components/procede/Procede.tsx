@@ -40,7 +40,7 @@ const Procede = () => {
       });
       modeleService.getModeles().then((res)=>{
         setModeles(res.modeles)
-        modeles.length > 0 ? setCurrentModele(...modeles[0]) : setCurrentModele({}) ;
+        modeles.length > 0 ? setCurrentModele(modeles[0]) : setCurrentModele({}) ;
       });
     }
   

@@ -40,7 +40,7 @@ const Modele = () => {
       });
       ingredientService.getIngredients().then((res)=>{
         setIngredients(res.ingredients)
-        ingredients.length > 0 ? setCurrentIngredient(...ingredients[0]) : setCurrentIngredient({}) ;
+        ingredients.length > 0 ? setCurrentIngredient(ingredients[0]) : setCurrentIngredient({}) ;
       });
     }
   

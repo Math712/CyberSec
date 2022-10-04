@@ -10,7 +10,7 @@ class AuthService {
       })
       .then(response => {
         if (Object.keys(response.data.user!).length !== 0) {
-          localStorage.setItem("user", JSON.stringify({id:response.data.user._doc.nom,nom:response.data.user._doc.nom}));
+          localStorage.setItem("user", JSON.stringify({id:response.data.user.id,nom:response.data.user.nom}));
         }
         return response.data;
       });
